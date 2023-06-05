@@ -50,7 +50,7 @@ module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
     return;
   }
 
-  res.send(card);
+  res.sendStatus(200);
 })
   .catch((err) => {
     if (err && err.name && err.name === 'CastError') {
@@ -66,7 +66,7 @@ module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
   { new: true },
 ).then((card) => {
   if (!card) {
-    res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
+    res.status(400).send({ message: 'Запрашиваемый пользователь не найден' });
     return;
   }
   res.send(card);
