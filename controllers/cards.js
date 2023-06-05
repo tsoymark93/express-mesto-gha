@@ -28,12 +28,12 @@ module.exports.deleteCard = (req, res) => {
         Card.remove({
           _id: req.params.cardId,
         })
-          .then(() => res.sendStatus(200));
+          .then(() => res.send(card));
       } else { res.status(400).send({ message: 'Запрашиваемая карточка не найдена' }); }
     })
     .catch((err) => {
       if (err && err.name && err.name === 'TypeError') {
-        res.status(404).send({ message: 'Запрашиваемая карточка не найдена' });
+        res.status(400).send({ message: 'Запрашиваемая карточка не найдена' });
       } else {
         res.status(500).send({ message: 'Ошибка сервера' });
       }
@@ -50,7 +50,7 @@ module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
     return;
   }
 
-  res.sendStatus(200);
+  res.send(card);
 })
   .catch((err) => {
     if (err && err.name && err.name === 'CastError') {
@@ -66,7 +66,7 @@ module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
   { new: true },
 ).then((card) => {
   if (!card) {
-    res.status(400).send({ message: 'Запрашиваемый пользователь не найден' });
+    res.status(404).send({ message: 'Запрашиваемый пользователь не найден' });
     return;
   }
   res.send(card);
