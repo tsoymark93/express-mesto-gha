@@ -29,7 +29,7 @@ module.exports.deleteCard = (req, res) => {
           _id: req.params.cardId,
         })
           .then(() => res.send(card));
-      } else { res.status(400).send({ message: 'Запрашиваемая карточка не найдена' }); }
+      } else { res.status(404).send({ message: 'Запрашиваемая карточка не найдена' }); }
     })
     .catch((err) => {
       if (err && err.name && err.name === 'TypeError') {
