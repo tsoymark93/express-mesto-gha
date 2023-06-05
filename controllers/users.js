@@ -4,7 +4,7 @@ module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send(users))
     .catch(() => {
-      res.status(500).send({ message: 'Ошибка сервера' });
+      res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -21,7 +21,7 @@ module.exports.getUser = (req, res) => {
       if (err && err.name && err.name === 'CastError') {
         res.status(400).send({ message: 'Запрашиваемый пользователь не найден' });
       } else {
-        res.status(500).send({ message: 'Ошибка сервера' });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -34,7 +34,7 @@ module.exports.createUser = (req, res) => {
       if (err && err.name && err.name === 'ValidationError') {
         res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
       } else {
-        res.status(500).send({ message: 'Ошибка сервера' });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -47,7 +47,7 @@ module.exports.updateUser = (req, res) => {
       if (err && err.name && err.name === 'ValidationError') {
         res.status(400).send({ message: 'Переданы некорректные данные при обновлении пользователя' });
       } else {
-        res.status(500).send({ message: 'Ошибка сервера' });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -60,7 +60,7 @@ module.exports.updateAvatar = (req, res) => {
       if (err && err.name && err.name === 'ValidationError') {
         res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара' });
       } else {
-        res.status(500).send({ message: 'Ошибка сервера' });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
