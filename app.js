@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
-const { PATH } = require('./config');
 
 const { PORT = 3000 } = process.env;
+const { PATH = 'mongodb://localhost:27017/mestodb' } = process.env.PATH;
 const app = express();
 app.use(bodyParser.json());
 
