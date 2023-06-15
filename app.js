@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 require('dotenv').config();
+const { errors } = require('celebrate');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
@@ -12,6 +13,7 @@ const NotFoundError = require('./errors/NotFoundError');
 const { PORT = 3000 } = process.env;
 const { PATH = 'mongodb://localhost:27017/mestodb' } = process.env.PATH;
 const app = express();
+
 app.use(bodyParser.json());
 const { validationCreateUser, validationLogin } = require('./middlewares/validation');
 
@@ -24,6 +26,7 @@ app.use('/', auth, cardRouter);
 app.use('*', auth, (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
+app.use(errors());
 app.use(centralError);
 
 app.listen(PORT, () => {

@@ -1,7 +1,7 @@
 const Card = require('../models/card');
 const ValidationError = require('../errors/ValidationError');
-const UnauthorizedError = require('../errors/UnauthorizedError');
 const NotFoundError = require('../errors/NotFoundError');
+const CurrentError = require('../errors/CurrentError');
 
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
@@ -33,7 +33,7 @@ module.exports.deleteCard = (req, res, next) => {
         return Card.deleteOne({ _id: req.params.cardId })
           .then(() => res.send(card));
       }
-      throw new UnauthorizedError('Недостаточно прав');
+      throw new CurrentError('Недостаточно прав');
     })
     .catch((err) => {
       if (err.name === 'CastError') {
