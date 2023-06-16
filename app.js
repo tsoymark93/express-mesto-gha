@@ -1,7 +1,7 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-require('dotenv').config();
 const { errors } = require('celebrate');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
@@ -21,9 +21,8 @@ mongoose.connect(PATH, { useFindAndModify: false });
 
 app.post('/signin', validationLogin, login);
 app.post('/signup', validationCreateUser, createUser);
-app.use(auth);
-app.use('/', userRouter);
-app.use('/', cardRouter);
+app.use('/', auth, userRouter);
+app.use('/', auth, cardRouter);
 app.use('*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
