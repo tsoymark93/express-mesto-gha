@@ -44,18 +44,25 @@ module.exports.deleteCard = (req, res, next) => {
     });
 };
 
-module.exports.likeCard = (req, res, next) => {
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $addToSet: { likes: req.user._id } },
+// eslint-disable-next-line arrow-body-style
+const updateCardLikes = (cardId, userId, updateData) => {
+  return Card.findByIdAndUpdate(
+    cardId,
+    updateData,
     { new: true },
   )
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Запрашиваемая карточка не найдена');
       }
-      res.send(card);
-    })
+      return card;
+    });
+};
+
+module.exports.likeCard = (req, res, next) => {
+  const updateData = { $addToSet: { likes: req.user._id } };
+  updateCardLikes(req.params.cardId, req.user._id, updateData)
+    .then((card) => res.send(card))
     .catch((err) => {
       if (err && err.name && err.name === 'CastError') {
         next(new ValidationError('Переданы некорректные данные для постановки/снятии лайка'));
@@ -66,17 +73,9 @@ module.exports.likeCard = (req, res, next) => {
 };
 
 module.exports.dislikeCard = (req, res, next) => {
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $pull: { likes: req.user._id } },
-    { new: true },
-  )
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Запрашиваемая карточка не найдена');
-      }
-      res.send(card);
-    })
+  const updateData = { $pull: { likes: req.user._id } };
+  updateCardLikes(req.params.cardId, req.user._id, updateData)
+    .then((card) => res.send(card))
     .catch((err) => {
       if (err && err.name && err.name === 'CastError') {
         next(new ValidationError('Переданы некорректные данные для постановки/снятии лайка'));

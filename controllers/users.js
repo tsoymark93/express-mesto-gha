@@ -5,6 +5,17 @@ const ConflictError = require('../errors/ConflictError');
 const ValidationError = require('../errors/ValidationError');
 const NotFoundError = require('../errors/NotFoundError');
 
+// eslint-disable-next-line arrow-body-style
+const updateUserFields = (userId, updateFields) => {
+  return User.findByIdAndUpdate(userId, updateFields, { new: true, runValidators: true })
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Запрашиваемый пользователь не найден');
+      }
+      return user;
+    });
+};
+
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send(users))
@@ -45,25 +56,15 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.updateUser = (req, res, next) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Запрашиваемый пользователь не найден');
-      }
-      res.send(user);
-    })
+  updateUserFields(req.user._id, { name, about })
+    .then((user) => res.send(user))
     .catch((err) => next(err));
 };
 
 module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Запрашиваемый пользователь не найден');
-      }
-      res.send(user);
-    })
+  updateUserFields(req.user._id, { avatar })
+    .then((user) => res.send(user))
     .catch((err) => next(err));
 };
 
@@ -73,7 +74,7 @@ module.exports.login = (req, res, next) => {
   return User
     .findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', {
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, {
         expiresIn: '7d',
       });
       res.send({ token });

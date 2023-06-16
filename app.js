@@ -21,9 +21,10 @@ mongoose.connect(PATH, { useFindAndModify: false });
 
 app.post('/signin', validationLogin, login);
 app.post('/signup', validationCreateUser, createUser);
-app.use('/', auth, userRouter);
-app.use('/', auth, cardRouter);
-app.use('*', auth, (req, res, next) => {
+app.use(auth);
+app.use('/', userRouter);
+app.use('/', cardRouter);
+app.use('*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
 app.use(errors());
