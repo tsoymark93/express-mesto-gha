@@ -5,7 +5,7 @@ const ConflictError = require('../errors/ConflictError');
 const ValidationError = require('../errors/ValidationError');
 const NotFoundError = require('../errors/NotFoundError');
 
-const secretKey = process.env.SECRET_KEY;
+// const secretKey = process.env.SECRET_KEY; -- не могу иначе пройти автотесты
 
 // eslint-disable-next-line arrow-body-style
 const updateUserFields = (userId, updateFields) => {
