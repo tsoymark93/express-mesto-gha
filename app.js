@@ -23,7 +23,7 @@ app.post('/signin', validationLogin, login);
 app.post('/signup', validationCreateUser, createUser);
 app.use('/', auth, userRouter);
 app.use('/', auth, cardRouter);
-app.use('*', (req, res, next) => {
+app.use('*', auth, (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
 app.use(errors());
