@@ -17,7 +17,8 @@ const app = express();
 app.use(bodyParser.json());
 const { validationCreateUser, validationLogin } = require('./middlewares/validation');
 
-mongoose.connect(PATH, { useFindAndModify: false });
+// eslint-disable-next-line max-len
+mongoose.connect(PATH, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 app.post('/signin', validationLogin, login);
 app.post('/signup', validationCreateUser, createUser);
