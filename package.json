@@ -25,7 +25,7 @@
     "joi": "^17.9.2",
     "joi-objectid": "^4.0.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^5.13.17",
+    "mongoose": "^5.13.20",
     "validator": "^13.9.0"
   }
 }
